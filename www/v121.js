@@ -1,4 +1,4 @@
-/* V121 — Telefon GERİ tuşu.
+/* V122 — Telefon GERİ tuşu.
    • Menülerde: bir önceki adıma döner (Geri/Vazgeç/Kapat düğmesini kendisi bulup basar; alt adım yoksa pencereyi kapatır).
    • Maçta: "Maçtan çıkmak istiyor musunuz?" sorar. Evet → ilerleme kaydedilir (tek kişilik) ve ana menüye dönülür.
    • Ana menüde: 2 sn içinde iki kez geri = uygulamadan çık.
@@ -121,7 +121,7 @@
   window.WCBack = { step: step, ask: ask, leave: leave };
 })();
 
-/* V121 — Seçili bölge artık bizim değilse (rakip aldı vb.) panelden "Politikalar" düğmesi kalkar. */
+/* V122 — Seçili bölge artık bizim değilse (rakip aldı vb.) panelden "Politikalar" düğmesi kalkar. */
 (function () {
   'use strict';
   function fix() {

@@ -1,4 +1,4 @@
-/* V121 — ikinci bilgi eksik olan ülkeler için ek keşif bilgisi. Mevcut FACTS23B'ye yalnızca eksik ülkeler eklenir. */
+/* V122 — ikinci bilgi eksik olan ülkeler için ek keşif bilgisi. Mevcut FACTS23B'ye yalnızca eksik ülkeler eklenir. */
 (function () {
   var N = {
 AFG: ["Afganistan'ın Wakhan Koridoru, ülkeyi Çin sınırına bağlayan dar bir dağ şeridi olarak uzanır.", "Afghanistan's Wakhan Corridor is a narrow mountain strip stretching to the Chinese border."],
