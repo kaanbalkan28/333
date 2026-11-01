@@ -53,7 +53,7 @@
         if (drag.on) { drag.vx = (e.clientX - drag.x) * .006; drag.vy = (e.clientY - drag.y) * .004; rotY += drag.vx; rotX = Math.max(-.7, Math.min(.9, rotX + drag.vy)); drag.x = e.clientX; drag.y = e.clientY; }
       });
       window.addEventListener('pointerup', function () { drag.on = false; });
-      window.addEventListener('resize', fit);
+      var _rt = 0; window.addEventListener('resize', function () { clearTimeout(_rt); _rt = setTimeout(fit, 200); });   /* V119: resize fırtınasında tek seferde uygula */
       document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else if (root.classList.contains('on')) start(); });
     }
     var sv = saveInfo(), emb = CFG.emblem ? '<img class="crest" src="' + CFG.emblem + '" alt="" style="animation:none">' : CREST;
@@ -233,7 +233,11 @@
   function fit() {
     if (!ready || !root) return; W = root.clientWidth || window.innerWidth; H = root.clientHeight || window.innerHeight;
     var _pr = Math.max(.6, Math.min(COARSE ? 1.25 : 1.5, window.devicePixelRatio || 1, Math.sqrt((COARSE ? 600000 : 1100000) / (W * H))) * qMul);
-    if (W !== fW || H !== fH || Math.abs(_pr - fR) > .01) { fW = W; fH = H; fR = _pr; try { renderer.setPixelRatio(_pr); } catch (e) { } renderer.setSize(W, H, false); }   /* V56: gereksiz yeniden boyutlandırma yok (küre yaklaşırken takılma) */
+    _pr = Math.round(_pr * 4) / 4;   /* V119: çözünürlük 0.25'lik sabit adımlara oturur; adres çubuğu/klavye gibi küçük boyut oynamaları gidip gelmeye yol açmaz */
+    if (Math.abs(W - fW) > 2 || Math.abs(H - fH) > 48 || Math.abs(_pr - fR) >= .2) {
+      fW = W; fH = H; fR = _pr; try { renderer.setPixelRatio(_pr); } catch (e) { } renderer.setSize(W, H, false);
+      try { renderer.render(scene, camera); } catch (e) { }   /* V119: setSize tuvali siler; hemen yeniden çiz (pencere açıkken kare atlandığı için boş kalmasın) */
+    }   /* V56: gereksiz yeniden boyutlandırma yok (küre yaklaşırken takılma) */
     camera.aspect = W / H; camera.updateProjectionMatrix();
     // Kamera yakınlaşma animasyonunda z değişir; yerleşim her zaman son mesafeye (3.8) göre hesaplanır
     var hh = Math.tan(20 * Math.PI / 180) * 3.8, hw = hh * camera.aspect, wide = W > 720 && W / H > 1.05, ppu = (H / 2) / hh;
@@ -264,7 +268,7 @@
     for (var i = 0; i < ev.length; i++) { var y = ep.getY(i) + ev[i] * dt; if (y > 3.2) { y = -3.2; ep.setX(i, (Math.random() - .5) * 9); } ep.setY(i, y); ep.setX(i, ep.getX(i) + Math.sin(t / 1400 + i) * dt * .06); }
     ep.needsUpdate = true;
     arcs.forEach(function (a) { stepArc(a, dt); });
-    if (fc > 20) { if (dt > (COARSE ? .045 : .026)) { if (++slowN > 20 && qMul > .5) { qMul *= .85; slowN = 0; fit(); } } else if (slowN > 0) slowN--; }   /* uyarlanabilir çözünürlük: yavaş cihazda otomatik düşür */
+    if (fc > 60) { if (dt > (COARSE ? .06 : .03)) { if (++slowN > 60 && qMul > .75) { qMul = Math.max(.75, qMul * .85); slowN = 0; fit(); } } else if (slowN > 0) slowN--; }   /* V119: yalnızca kalıcı yavaşlıkta ve en fazla .75'e kadar düşer (çözünürlük gidip gelmesin) */   /* uyarlanabilir çözünürlük: yavaş cihazda otomatik düşür */
     fc++; if (fc > 3) introAcc += dt; if (fc === 4) cv.classList.add('rd');
     var intro = Math.min(1, introAcc / 2.4); camera.position.z = 3.8 + (1 - intro * intro * (3 - 2 * intro)) * 1.8;
     renderer.render(scene, camera);

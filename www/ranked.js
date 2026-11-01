@@ -130,26 +130,21 @@
     var A = art(), lg = league(P.rating), nx = lg.i < LG.length - 1 ? league(LG[lg.i + 1].min) : null,
       pct = lg.hi ? Math.max(3, Math.round((P.rating - lg.lo) / (lg.hi - lg.lo) * 100)) : 100, left = lg.hi ? lg.hi - P.rating : 0;
     rmodal('<div class="wcr-hub">' +
-      '<div class="wcr-corner c-tl">' + A.ic('rose', 26, 26) + '</div><div class="wcr-corner c-tr">' + A.ic('rose', 26, 26) + '</div><div class="wcr-corner c-bl">' + A.ic('rose', 26, 26) + '</div><div class="wcr-corner c-br">' + A.ic('rose', 26, 26) + '</div>' +
-      '<div class="wcr-title">' + A.crossed(34) + '<h3>' + X('RANK MAÇI', 'RANKED MATCH') + '</h3>' + A.crossed(34) + '</div>' +
-      '<div class="wcr-div"><i></i>' + A.ic('rose', 18, 18) + '<i></i></div>' +
-      '<div class="wcr-stage" style="--c:' + lg.c + '"><div class="wcr-rays"></div><div class="wcr-sh">' + A.ic('shield', 150, 180) + '</div>' +
-        '<div class="wcr-wp l">' + A.ic('axe', 44, 88) + A.ic('sword', 18, 90) + '</div><div class="wcr-wp r">' + A.ic('spear', 20, 104) + A.ic('sword', 18, 90) + '</div>' +
-        '<div class="wcr-m3d">' + A.medal(lg, 150) + '</div></div>' +
-      '<div class="wcr-plate"><b>' + esc(P.nick || '—') + '</b></div>' +
-      '<div class="wcr-lgn" style="color:' + lg.c + '">' + esc(lg.label.toUpperCase()) + '</div>' +
-      '<div class="wcr-rat">★ ' + P.rating + '</div>' +
+      '<div class="wcr-seal">' + X('RANK MAÇI', 'RANKED MATCH') + '</div>' +
+      '<div class="wcr-stage" style="--c:' + lg.c + '"><div class="wcr-grat"></div><div class="wcr-m3d">' + A.medal(lg, 140) + '</div></div>' +
+      '<h1 class="wcr-h1">' + esc(P.nick || '—') + '<span>' + esc(lg.label.toLocaleUpperCase(X('tr', 'en-US'))) + '</span></h1>' +
+      '<div class="wcr-stats"><div><small>' + X('PUAN', 'RATING') + '</small><b>' + P.rating + '</b></div><div><small>' + X('SONRAKİ LİGE', 'TO NEXT LEAGUE') + '</small><b>' + (lg.hi ? left : '—') + '</b></div></div>' +
       '<div class="wcr-prog"><span class="pm">' + A.mini(lg, 34) + '</span><div class="wcr-bar2"><i style="width:' + pct + '%"></i><em></em></div><span class="pm dim">' + (nx ? A.mini(nx, 34) : A.ic('rose', 30, 30)) + '</span></div>' +
-      '<div class="wcr-sm">' + (lg.hi ? X('Sonraki lige ', 'To next league: ') + left + X(' puan', ' pts') : X('En üst lig', 'Top league')) + '</div>' +
       (cfgOk() ? '' : '<div class="wcr-note">' + X('Firebase ayarlanmamış: gerçek rakip aranmaz, liderlik tablosu kapalı.', 'Firebase is not configured: no live opponents, leaderboard disabled.') + '</div>') +
-      '<button class="big pri wcr-go" onclick="WCRank.find()">' + A.crossed(26) + '<span>' + X('Maç Bul', 'Find Match') + '</span>' + A.crossed(26) + '</button>' +
-      '<div class="wcr-two"><button class="big" onclick="WCRank.board()">' + A.ic('shield', 18, 22) + '<span>' + X('Liderlik', 'Leaderboard') + '</span></button>' +
-      '<button class="big" onclick="WCRank.nick()">' + A.ic('rose', 20, 20) + '<span>' + X('Takma Ad', 'Nickname') + '</span></button></div>' +
-      '<button class="big ghost wcr-x2" onclick="closeMod()">' + X('Kapat', 'Close') + '</button></div>');
+      '<div class="menu">' +
+        '<button class="mb pri" onclick="WCRank.find()"><em>01</em><span>' + X('Maç Bul', 'Find Match') + '</span></button>' +
+        '<button class="mb" onclick="WCRank.board()"><em>02</em><span>' + X('Liderlik', 'Leaderboard') + '</span></button>' +
+        '<button class="mb" onclick="WCRank.nick()"><em>03</em><span>' + X('Takma Ad', 'Nickname') + '</span></button>' +
+        '<button class="mb gh" onclick="closeMod()"><em>×</em><span>' + X('Kapat', 'Close') + '</span></button></div></div>');
   }
   function openHub() {
     if (!window.WCStats || !WCStats.ready()) return toast(X('Ülke verisi yükleniyor, birazdan tekrar dene', 'Country data is loading, try again shortly'));
-    rmodal('<h3>★ ' + X('Rank Maçı', 'Ranked Match') + '</h3>' + M_(X('Bağlanılıyor…', 'Connecting…')));
+    rmodal('<h3>' + X('Rank Maçı', 'Ranked Match') + '</h3>' + M_(X('Bağlanılıyor…', 'Connecting…')));
     fbInit(function () {
       syncProfile(function () {
         if (!P.nick) return askNick(true);

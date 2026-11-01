@@ -296,7 +296,7 @@
   panel = function () {
     var r = _pn2.apply(this, arguments);
     try {
-      if (G && G.sel && G.sel === G.pl) {
+      if (G && G.sel && (G.sel === G.pl || G.owner[G.sel] === G.pl)) {   // V121: fethedilen bölgeler de "kendi ülkemiz"
         var el = document.getElementById('panel');
         if (el) el.querySelectorAll('.v15a > button:not(.polbtn), .px > button:not(.polbtn)').forEach(function (b) { b.remove(); });
       }
